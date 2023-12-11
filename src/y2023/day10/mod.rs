@@ -38,7 +38,7 @@ pub fn pipe_maze() {
     }
 
     // println!("start: ({}, {})", start.0, start.1);
-    print_map(&map, &Vec::new());
+    // print_map(&map, &Vec::new());
 
     let mut biggest_loop: Vec<(usize, usize)> = Vec::new();
 
@@ -82,8 +82,7 @@ pub fn pipe_maze() {
             _ => (),
         }
     }
-
-    // let biggest_loop = find_biggest_loop(&map, start, Vec::new());
+    biggest_loop.push(start);
 
     // println!("{:?}", biggest_loop);
     // print_map(&map, &biggest_loop);
@@ -337,11 +336,9 @@ pub fn pipe_maze() {
         }
     }
 
-    print_map(&map, &biggest_loop);
+    // print_map(&map, &biggest_loop);
 
     println!("Year 2023 day 10 part 2: {}", part2);
-
-    println!("")
 }
 
 fn get_loop(map: &Vec<Vec<char>>, start: (usize, usize)) -> (bool, Vec<(usize, usize)>) {

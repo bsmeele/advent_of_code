@@ -4,5 +4,5 @@ pub mod y2023;
 fn main() {
     // y2022::day17::pyroclastic_flow();
     // y2022::day22::monkey_map();
-    y2023::day10::pipe_maze();
+    y2023::day11::cosmic_expansion();
 }
