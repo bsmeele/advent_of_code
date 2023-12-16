@@ -15,80 +15,85 @@ pub fn the_floor_will_be_lava() {
     }
     // draw_map(&map);
 
-    let mut map_part1 = map.clone();
-    let tiles = simulate_beam(&mut map_part1, (0, 0), Direction::East, HashSet::new());
-    // draw_map(&map_part1);
+    let mut tiles: HashSet<((usize, usize), Direction)> = HashSet::new();
+    simulate_beam(&map, (0, 0), Direction::East, &mut tiles);
+    // draw_map(&map);
+    // draw_tiles(&tiles, (map[0].len(), map.len()));
 
-    println!("Year 2023 day 16 part 1: {}", tiles.len());
+    println!("Year 2023 day 16 part 1: {}", get_score(&tiles));
 
-    let mut map_part2;
-    let mut res;
+    let mut res: usize;
     let mut max_energized = 0;
-    let mut max_map = map.clone();
+    let mut max_tiles = HashSet::new();
     for x in 0..map[0].len() {
-        map_part2 = map.clone();
-        res = simulate_beam(&mut map_part2, (x, 0), Direction::South, HashSet::new()).len();
+        tiles = HashSet::new();
+        simulate_beam(&map, (x, 0), Direction::South, &mut tiles);
+        res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_map = map_part2.clone();
+            max_tiles = tiles.clone();
         }
-        map_part2 = map.clone();
-        res = simulate_beam(&mut map_part2, (x, map.len()-1), Direction::North, HashSet::new()).len();
+
+        tiles = HashSet::new();
+        simulate_beam(&map, (x, map.len()-1), Direction::North, &mut tiles);
+        res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_map = map_part2.clone();
+            max_tiles = tiles.clone();
         }
     }
 
     for y in 0..map.len() {
-        map_part2 = map.clone();
-        res = simulate_beam(&mut map_part2, (0, y), Direction::East, HashSet::new()).len();
+        tiles = HashSet::new();
+        simulate_beam(&map, (0, y), Direction::East, &mut tiles);
+        res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_map = map_part2.clone();
+            max_tiles = tiles.clone();
         }
-        map_part2 = map.clone();
-        res = simulate_beam(&mut map_part2, (map[0].len()-1, y), Direction::West, HashSet::new()).len();
+
+        tiles = HashSet::new();
+        simulate_beam(&map, (map[0].len()-1, y), Direction::West, &mut tiles);
+        res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_map = map_part2.clone();
+            max_tiles = tiles.clone();
         }
     }
     // draw_map(&max_map);
+    // draw_tiles(&max_tiles, (map[0].len(), map.len()));
 
     println!("Year 2023 day 16 part 2: {}", max_energized);
 }
 
-fn simulate_beam(map: &mut Vec<Vec<char>>, start: (usize, usize), direction: Direction, tiles: HashSet<(usize, usize)>) -> HashSet<(usize, usize)> {
+fn get_score(tiles: &HashSet<((usize, usize), Direction)>) -> usize {
+    let mut tmp: HashSet<(usize, usize)> = HashSet::new();
+    for (e, _) in tiles {
+        tmp.insert(*e);
+    }
+    tmp.len()
+}
+
+#[allow(dead_code)]
+fn draw_tiles(tiles: &HashSet<(usize, usize)>, bounds: (usize, usize)) {
+    for y in 0..bounds.1 {
+        for x in 0..bounds.0 {
+            if tiles.contains(&(x, y)) { print!("#"); }
+            else { print!(".") };
+        }
+        println!();
+    }
+    println!();
+}
+
+fn simulate_beam(map: &Vec<Vec<char>>, start: (usize, usize), direction: Direction, tiles: &mut HashSet<((usize, usize), Direction)>) {
     let mut loc = start;
     let mut direction = direction;
-    let mut tiles = tiles;
 
     loop {
-        tiles.insert(loc);
+        if tiles.contains(&(loc, direction)) { break; };
 
-        match (map[loc.1][loc.0], direction) {
-            ('^', Direction::North) => break,
-            ('>', Direction::East) => break,
-            ('v', Direction::South) => break,
-            ('<', Direction::West) => break,
-            _ => (),
-        }
-
-        match map[loc.1][loc.0] {
-            '\\' | '/' | '-' | '|' | '*' => (),
-            '.' => {
-                match direction {
-                    Direction::North => map[loc.1][loc.0] = '^',
-                    Direction::East => map[loc.1][loc.0] = '>',
-                    Direction::South => map[loc.1][loc.0] = 'v',
-                    Direction::West => map[loc.1][loc.0] = '<'
-                }
-            },
-            '^' | '>' | 'v' | '<' => map[loc.1][loc.0] = '2',
-            c if c.is_numeric() => map[loc.1][loc.0] = if let Some(c) = char::from_digit(c.to_digit(10).unwrap() + 1, 10) { c } else { '*' },
-            _ => panic!("Unreachable"),
-        }
+        tiles.insert((loc, direction));
 
         match direction {
             Direction::North => {
@@ -96,8 +101,8 @@ fn simulate_beam(map: &mut Vec<Vec<char>>, start: (usize, usize), direction: Dir
                     '\\' => direction = Direction::West,
                     '/' => direction = Direction::East,
                     '-' => {
-                        if loc.0 > 0 { tiles.extend(simulate_beam(map, (loc.0 - 1, loc.1), Direction::West, tiles.clone())); }
-                        if loc.0 + 1 < map[0].len() { tiles.extend(simulate_beam(map, loc, Direction::East, tiles.clone())); }
+                        if loc.0 > 0 { simulate_beam(map, (loc.0 - 1, loc.1), Direction::West, tiles); }
+                        if loc.0 + 1 < map[0].len() { simulate_beam(map, loc, Direction::East, tiles); }
                         break;
                     },
                     _ => (),
@@ -108,8 +113,8 @@ fn simulate_beam(map: &mut Vec<Vec<char>>, start: (usize, usize), direction: Dir
                     '\\' => direction = Direction::South,
                     '/' => direction = Direction::North,
                     '|' => {
-                        if loc.1 > 0 { tiles.extend(simulate_beam(map, (loc.0, loc.1 - 1), Direction::North, tiles.clone())); }
-                        if loc.1 + 1 < map.len() { tiles.extend(simulate_beam(map, (loc.0, loc.1 + 1), Direction::South, tiles.clone())); }
+                        if loc.1 > 0 { simulate_beam(map, (loc.0, loc.1 - 1), Direction::North, tiles); }
+                        if loc.1 + 1 < map.len() { simulate_beam(map, (loc.0, loc.1 + 1), Direction::South, tiles); }
                         break;
                     },
                     _ => (),
@@ -120,8 +125,8 @@ fn simulate_beam(map: &mut Vec<Vec<char>>, start: (usize, usize), direction: Dir
                     '\\' => direction = Direction::East,
                     '/' => direction = Direction::West,
                     '-' => {
-                        if loc.0 > 0 { tiles.extend(simulate_beam(map, (loc.0 - 1, loc.1), Direction::West, tiles.clone())); }
-                        if loc.0 + 1 < map[0].len() { tiles.extend(simulate_beam(map, loc, Direction::East, tiles.clone())); }
+                        if loc.0 > 0 { simulate_beam(map, (loc.0 - 1, loc.1), Direction::West, tiles); }
+                        if loc.0 + 1 < map[0].len() { simulate_beam(map, loc, Direction::East, tiles); }
                         break;
                     }
                     _ => (),
@@ -132,8 +137,8 @@ fn simulate_beam(map: &mut Vec<Vec<char>>, start: (usize, usize), direction: Dir
                     '\\' => direction = Direction::North,
                     '/' => direction = Direction::South,
                     '|' => {
-                        if loc.1 > 0 { tiles.extend(simulate_beam(map, (loc.0, loc.1 - 1), Direction::North, tiles.clone())); }
-                        if loc.1 + 1 < map.len() { tiles.extend(simulate_beam(map, (loc.0, loc.1 + 1), Direction::South, tiles.clone())); }
+                        if loc.1 > 0 { simulate_beam(map, (loc.0, loc.1 - 1), Direction::North, tiles); }
+                        if loc.1 + 1 < map.len() { simulate_beam(map, (loc.0, loc.1 + 1), Direction::South, tiles); }
                         break;
                     },
                     _ => (),
@@ -145,10 +150,8 @@ fn simulate_beam(map: &mut Vec<Vec<char>>, start: (usize, usize), direction: Dir
             Direction::East => if loc.0 + 1 < map[0].len() { loc.0 += 1; } else { break; },
             Direction::South => if loc.1 + 1 < map.len() { loc.1 +=1; } else { break; },
             Direction::West => if loc.0 > 0 { loc.0 -= 1; } else { break; },
-                    }
+        }
     }
-
-    tiles
 }
 
 #[allow(dead_code)]
@@ -162,7 +165,7 @@ fn draw_map(map: &Vec<Vec<char>>) {
     println!();
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, PartialEq, Hash)]
 enum Direction {
     North,
     East,
