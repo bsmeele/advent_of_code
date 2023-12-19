@@ -24,14 +24,14 @@ pub fn the_floor_will_be_lava() {
 
     let mut res: usize;
     let mut max_energized = 0;
-    let mut max_tiles = HashSet::new();
+    // let mut max_tiles = HashSet::new();
     for x in 0..map[0].len() {
         tiles = HashSet::new();
         simulate_beam(&map, (x, 0), Direction::South, &mut tiles);
         res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_tiles = tiles.clone();
+            // max_tiles = tiles.clone();
         }
 
         tiles = HashSet::new();
@@ -39,7 +39,7 @@ pub fn the_floor_will_be_lava() {
         res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_tiles = tiles.clone();
+            // max_tiles = tiles.clone();
         }
     }
 
@@ -49,7 +49,7 @@ pub fn the_floor_will_be_lava() {
         res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_tiles = tiles.clone();
+            // max_tiles = tiles.clone();
         }
 
         tiles = HashSet::new();
@@ -57,7 +57,7 @@ pub fn the_floor_will_be_lava() {
         res = get_score(&tiles);
         if res > max_energized {
             max_energized = res;
-            max_tiles = tiles.clone();
+            // max_tiles = tiles.clone();
         }
     }
     // draw_map(&max_map);
