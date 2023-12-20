@@ -188,7 +188,7 @@ pub fn haunted_wasteland() {
     println!("Year 2023 day 8 part 2: {}", num);
 }
 
-fn lcm(a: usize, b: usize) -> usize {
+pub fn lcm(a: usize, b: usize) -> usize {
     a * b / gcd(a, b)
 }
 

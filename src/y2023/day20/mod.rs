@@ -1,4 +1,4 @@
-use std::collections::{HashMap, VecDeque};
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -10,6 +10,7 @@ pub fn pulse_propagation() {
 
     let mut network: HashMap<String, Module> = HashMap::new();
     let num_presses = 1000;
+    let sand_machine = "rx";
 
     for line in reader.lines().map(|x| x.unwrap()) {
         let split = line.split('-').collect::<Vec<&str>>();
@@ -74,29 +75,45 @@ pub fn pulse_propagation() {
     //   pk outputs high with a period of 4021 presses
     // This results in rx receiving a low after lcm(3881, 3889, 4013, 4021) = 243_548_140_870_057 presses
 
-    // Todo:
-    // Find module that outputs to rx
-    // Get modules that output to that node
-    // Find the periods for those modules
-    // Calculate lcm
-
-    let mut button_presses = 0;
     network = backup_network;
+    let mut targets: HashSet<String> = HashSet::new();
+    'find_target: for (_, m) in &network {
+        for o in &m.out {
+            if o == sand_machine {
+                if let ModuleType::Conjunction(c) = &m.module_type {
+                    for (t, _) in &c.memory {
+                        targets.insert(t.clone());
+                    }
+                } ;
+                break 'find_target;
+            }
+        }
+    }
+
+    let mut periods: HashMap<String, usize> = HashMap::new();
+    let mut button_presses = 0;
     'press_loop: loop {
         button_presses += 1;
-        // if button_presses%100 == 0 { println!("{}", button_presses); }
         pulse.push_back((String::from("broadcast"), false, String::from("button")));
         while let Some((to, p, from)) = pulse.pop_front() {
-            if to == "vf" && p { println!("{} from {} to vf after {}", p, from.clone(), button_presses); }
             if let Some(out) = network.get_mut(&to) {
                 if let Some(o) = out.pulse(from, p) {
                     for m in o.0 {
                         if m == "rx" && !o.1 { break 'press_loop; }
+                        if o.1 && targets.contains(&to) && !periods.contains_key(&to) {
+                            periods.insert(to.clone(), button_presses);
+                            if periods.len() == targets.len() { break 'press_loop; }
+                        }
                         pulse.push_back((m, o.1, to.clone()));
                     }
                 }
             }
         }
+    }
+
+    button_presses = 1;
+    for e in periods.values() {
+        button_presses = crate::y2023::day8::lcm(button_presses, *e);
     }
 
     println!("Year 2023 day 20 part 2: {}", button_presses);
