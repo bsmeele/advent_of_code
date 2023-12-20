@@ -63,6 +63,8 @@ pub fn pulse_propagation() {
 
     println!("Year 2023 day 20 part 1: {}", low_pulses * high_pulses);
 
+    if test { return; }
+
     // After inspection by flow chart:
     //   rx receives input from one conjunction called vf
     //   vf receives input from four conjunctions called pm, mk, pk, and hf
@@ -71,6 +73,12 @@ pub fn pulse_propagation() {
     //   hf outputs high with a period of 4013 presses
     //   pk outputs high with a period of 4021 presses
     // This results in rx receiving a low after lcm(3881, 3889, 4013, 4021) = 243_548_140_870_057 presses
+
+    // Todo:
+    // Find module that outputs to rx
+    // Get modules that output to that node
+    // Find the periods for those modules
+    // Calculate lcm
 
     let mut button_presses = 0;
     network = backup_network;
