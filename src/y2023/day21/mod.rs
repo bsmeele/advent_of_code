@@ -4,13 +4,13 @@ use std::io::{BufRead, BufReader};
 
 pub fn step_counter() {
     let test = true;
-    let filename = if test { "src/y2023/day21/test" } else { "src/y2023/day21/input" };
+    let filename = if test { "src/y2023/day21/test2" } else { "src/y2023/day21/input" };
     let file = File::open(filename).unwrap();
     let reader = BufReader::new(file);
 
     let mut steps = if test { 6 } else { 64 };
-    let mut rocks: HashSet<(usize, usize)> = HashSet::new();
-    let mut plots: HashSet<(usize, usize)> = HashSet::new();
+    let mut rocks: HashSet<(isize, isize)> = HashSet::new();
+    let mut plots: HashSet<(isize, isize)> = HashSet::new();
     let mut start = (0, 0);
     let mut x = 0;
     let mut y = 0;
@@ -38,17 +38,48 @@ pub fn step_counter() {
 
     println!("Year 2023 day 21 part 1: {}", reachable.len());
 
-    steps = if test { 5000 } else { 26501365 };
-    reachable = walk(&plots, start, steps, (x, y), &mut HashSet::new(), false);
+    // Notes:
+    //   After a certain amount of steps, the base (non expanded) map alternates between two possible reach sets
+    //   After this, if the number of steps is even, only the even coordinates are reachable
+    //   For odd steps, only the odd coordinates
+    //   A coordinate being even or odd based on whether the sum of the coordinates is even or odd
+    //   For the test map this state is reached after 13 steps
+    //   For the input map it is 129
+
+    // Todo:
+    //   Find the worst case amount of steps it takes to reach a cycle state
+    //   Find the shortest path from the start to each edge
+    //   Find the shortest path from the shortest edge entry point to each other edge
+
+    steps = if test { 5000 } else { 26_501_365 };
+    steps = 17;
+    reachable = HashSet::new();
+    let mut cache: HashSet<((isize, isize), usize)> = HashSet::new();
+    let mut q: Vec<((isize, isize), usize)> = Vec::from([(start, steps)]);
+    while let Some((loc, step)) = q.pop() {
+        if step == 0 {
+            reachable.insert(loc);
+            continue;
+        }
+        if cache.contains(&(loc, step)) { continue; }
+
+        if plots.contains(&(loc.0+1, loc.1)) { q.push(((loc.0+1, loc.1), step-1)); }
+        if plots.contains(&(loc.0-1, loc.1)) { q.push(((loc.0-1, loc.1), step-1)); }
+        if plots.contains(&(loc.0, loc.1+1)) { q.push(((loc.0, loc.1+1), step-1)); }
+        if plots.contains(&(loc.0, loc.1-1)) { q.push(((loc.0, loc.1-1), step-1)); }
+
+        cache.insert((loc, step));
+    }
+
     println!("Year 2023 day 21 part 2: {}", reachable.len());
-    // draw_map(&plots, &reachable, start, (x, y));
+    draw_map(&plots, &reachable, start, (x, y));
 }
 
-fn walk(plots: &HashSet<(usize, usize)>, current: (usize, usize), steps: usize, bounds: (usize, usize), cache: &mut HashSet<((usize, usize), usize)>, part2: bool) -> HashSet<(usize, usize)> {
+fn walk(plots: &HashSet<(isize, isize)>, current: (isize, isize), steps: usize, bounds: (isize, isize), cache: &mut HashSet<((isize, isize), usize)>, part2: bool) -> HashSet<(isize, isize)> {
     if steps == 0 { return HashSet::from([current]); }
     if cache.contains(&(current, steps)) { return HashSet::new(); }
 
-    let mut acc: HashSet<(usize, usize)> = HashSet::new();
+    let mut acc: HashSet<(isize, isize)> = HashSet::new();
 
     if plots.contains(&(current.0+1, current.1)) { acc.extend(walk(plots, (current.0+1, current.1), steps-1, bounds, cache, part2)); }
     if current.0 > 0 && plots.contains(&(current.0-1, current.1)) { acc.extend(walk(plots, (current.0-1, current.1), steps-1, bounds, cache, part2));  }
@@ -63,7 +94,9 @@ fn walk(plots: &HashSet<(usize, usize)>, current: (usize, usize), steps: usize, 
 #[allow(dead_code)]
 fn draw_map(plots: &HashSet<(isize, isize)>, reachable: &HashSet<(isize, isize)>, start: (isize, isize), bounds: (isize, isize)) {
     for y in 0..bounds.1 {
+        if y == 11 || y == 22 { println!("-----------------------------------")}
         for x in 0..bounds.0 {
+            if x == 11 || x == 22 { print!("|"); }
             if reachable.contains(&(x, y)) { print!("O"); }
             else if (x, y) == start { print!("S"); }
             // else if rocks.contains(&(x, y)) { print!("#"); }
