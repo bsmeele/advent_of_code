@@ -92,11 +92,11 @@ fn walk(plots: &HashSet<(isize, isize)>, current: (isize, isize), steps: usize, 
 }
 
 #[allow(dead_code)]
-fn draw_map(plots: &HashSet<(isize, isize)>, reachable: &HashSet<(isize, isize)>, start: (isize, isize), bounds: (isize, isize)) {
-    for y in 0..bounds.1 {
-        if y == 11 || y == 22 { println!("-----------------------------------")}
-        for x in 0..bounds.0 {
-            if x == 11 || x == 22 { print!("|"); }
+fn draw_map(plots: &HashSet<(isize, isize)>, reachable: &HashSet<(isize, isize)>, start: (isize, isize), bounds: (isize, isize), expand: usize) {
+    for y in 0..bounds.1*expand {
+        // if y == 11 || y == 22 { println!("-----------------------------------")}
+        for x in 0..bounds.0*expand {
+            // if x == 11 || x == 22 { print!("|"); }
             if reachable.contains(&(x, y)) { print!("O"); }
             else if (x, y) == start { print!("S"); }
             // else if rocks.contains(&(x, y)) { print!("#"); }

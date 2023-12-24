@@ -29,4 +29,9 @@ pub fn sand_slabs() {
         println!("{:?}", b);
     }
     println!();
+
+    // Todo:
+    //   Simulate blocks falling one by one
+    //   For each block, check how many blocks it is supported by
+    //   Add the amount of supporters to the score if there are two or more supportersgi
 }
