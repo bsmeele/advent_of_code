@@ -1,10 +1,17 @@
+use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use crate::web_stuff::get_input;
 
 pub fn trebuchet() {
     let test = false;
-    let filename = if test { "src/y2023/day1/test1" } else { "src/y2023/day1/input" };
-    let file = File::open(filename).unwrap();
+    let file_path = if test { "src/y2023/day1/test1" } else { "src/y2023/day1/input" };
+    if let Ok(metadata) = fs::metadata(file_path) {
+        if !metadata.is_file() {
+            if get_input(2023, 1).is_err() { return; }
+        }
+    }
+    let file = File::open(file_path).unwrap();
     let reader = BufReader::new(file);
 
     let mut acc = 0;

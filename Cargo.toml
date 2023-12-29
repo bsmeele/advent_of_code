@@ -8,3 +8,9 @@ edition = "2021"
 [dependencies]
 regex = "1.10.2"
 ansi_term = "0.12.1"
+reqwest = { version = "0.11.23", featues = ["blocking"] }
+tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
+select = "0.6.0"
+clap = { version =  "4.4.12", features = ["derive"] }
+tera = "1.19.1"
+ureq = "2.9.1"

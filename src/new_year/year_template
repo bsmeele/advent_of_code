@@ -1,0 +1,80 @@
+use std::time::Instant;
+
+pub mod day1;
+pub mod day2;
+pub mod day3;
+pub mod day4;
+pub mod day5;
+pub mod day6;
+pub mod day7;
+pub mod day8;
+pub mod day9;
+pub mod day10;
+pub mod day11;
+pub mod day12;
+pub mod day13;
+pub mod day14;
+pub mod day15;
+pub mod day16;
+pub mod day17;
+pub mod day18;
+pub mod day19;
+pub mod day20;
+pub mod day21;
+pub mod day22;
+pub mod day23;
+pub mod day24;
+pub mod day25;
+
+pub fn y{{ year }}(day: u8, test: bool) {
+    if day > 25 {
+        println!("Invalid day");
+        return;
+    }
+
+    let start_time = Instant::now();
+
+    if day == 0 {
+        for day in 1..=25 {
+            y{{ year }}(day, test);
+        }
+        let end_time = Instant::now();
+        let elapsed_time = end_time - start_time;
+        println!("Total time: {:.2?}", elapsed_time);
+        return;
+    }
+    else {
+        match day {
+            1 => day1::day1(test),
+            2 => day2::day2(test),
+            3 => day3::day3(test),
+            4 => day4::day4(test),
+            5 => day5::day5(test),
+            6 => day6::day6(test),
+            7 => day7::day7(test),
+            8 => day8::day8(test),
+            9 => day9::day9(test),
+            10 => day10::day10(test),
+            11 => day11::day11(test),
+            12 => day12::day12(test),
+            13 => day13::day13(test),
+            14 => day14::day14(test),
+            15 => day15::day15(test),
+            16 => day16::day16(test),
+            17 => day17::day17(test),
+            18 => day18::day18(test),
+            19 => day19::day19(test),
+            20 => day20::day20(test),
+            21 => day21::day21(test),
+            22 => day22::day22(test),
+            23 => day23::day23(test),
+            24 => day24::day24(test),
+            25 => day25::day25(test),
+            _ => println!("Invalid day"),
+        }
+
+        let end_time = Instant::now();
+        let elapsed_time = end_time - start_time;
+        println!("Year {{ year }} day {} executed in {:.2?}", day, elapsed_time);
+    }
+}
