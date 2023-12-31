@@ -1,5 +1,4 @@
-use std::fs;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{BufRead, BufReader};
 use crate::web_stuff::get_input;
 
@@ -14,70 +13,61 @@ pub fn trebuchet() {
     let file = File::open(file_path).unwrap();
     let reader = BufReader::new(file);
 
-    let mut acc = 0;
+    let mut acc1 = 0;
+    let mut acc2 = 0;
+    let mut first1 = 0;
+    let mut first2 = 0;
+    let mut last1 = 0;
+    let mut last2 = 0;
+    let mut flag;
+    let mut l;
+    let mut r;
 
-    for line in reader.lines() {
-        let line = line.unwrap();
-
-        let mut list: Vec<u32> = Vec::new();
-
-        for c in line.chars() {
-            if let Some(n) = c.to_digit(10) {
-                list.push(n);
-            }
-        }
-
-        acc += list[0] * 10 + list.last().unwrap();
-    }
-
-    println!("Day 1 part 1: {}", acc);
-
-    let filename = if test { "src/y2023/day1/test2" } else { "src/y2023/day1/input" };
-    let file = File::open(filename).unwrap();
-    let reader = BufReader::new(file);
-
-    acc = 0;
-
-    for line in reader.lines() {
-        let line = line.unwrap();
-
-        let mut first: u32 = 0;
-        let mut last: u32 = 0;
-
-        let mut substring = String::new();
+    for line in reader.lines().map(|x| x.unwrap()) {
+        l = 0;
+        r = 0;
+        flag = false;
 
         for c in line.chars() {
             if let Some(n) = c.to_digit(10) {
-                first = n;
+                first1 = n;
+                if !flag { first2 = n; }
                 break;
-            } else {
-                substring.push(c);
-                if let Some(n) = contains_num(&substring) {
-                    first = n;
-                    substring.clear();
-                    break;
+            } else if !flag {
+                r += 1;
+                if r - l > 5 { l += 1; }
+                if let Some(n) = contains_num(&line[l..r]) {
+                    first2 = n;
+                    flag = true;
                 }
             }
         }
+
+        flag = false;
+        l = line.len();
+        r = line.len();
 
         for c in line.chars().rev() {
             if let Some(n) = c.to_digit(10) {
-                last = n;
+                last1 = n;
+                if !flag { last2 = n; }
                 break;
-            } else {
-                substring.push(c);
-                let s = substring.chars().rev().collect::<String>();
-                if let Some(n) = contains_num(&s) {
-                    last = n;
-                    break;
+            } else if !flag {
+                l -= 1;
+                if r - l > 5 { r -= 1; }
+                if let Some(n) = contains_num(&line[l..r]) {
+                    last2 = n;
+                    flag = true;
                 }
             }
         }
 
-        acc += first * 10 + last;
+        acc1 += first1 * 10 + last1;
+        acc2 += first2 * 10 + last2;
     }
 
-    println!("Day 1 part 2: {}", acc);
+    println!("Year 2023 day 1 part 1: {}", acc1);
+    println!("Year 2023 day 1 part 2: {}", acc2);
 }
 
 fn contains_num(s: &str) -> Option<u32> {

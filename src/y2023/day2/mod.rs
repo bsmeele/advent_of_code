@@ -1,6 +1,5 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use regex::Regex;
 
 pub fn cube_conundrum() {
     let test = false;
@@ -11,54 +10,41 @@ pub fn cube_conundrum() {
     let max_colors = [12, 13, 14];
     let mut acc1 = 0;
     let mut acc2 = 0;
-    // let re = Regex::new(r"Game (\d+): ([^;]+)").unwrap();
-    let re = Regex::new(r"Game (\d+): (.+)").unwrap();
+    let mut possible;
+    let mut min_colors;
 
-    for line in reader.lines() {
-        let line = line.unwrap();
+    for line in reader.lines().map(|x| x.unwrap()) {
+        let line = line.split(':').collect::<Vec<&str>>();
+        let id = line[0][5..].parse::<usize>().unwrap();
 
-        if let Some(captures) = re.captures(&line) {
-            let id = captures.get(1).map_or("", |m| m.as_str()).parse::<usize>().unwrap();
-            let sets: Vec<&str> = captures.get(2).map_or("", |m| m.as_str()).split(';').collect();
+        possible = true;
+        min_colors = [0, 0, 0];
 
-            let mut possible = true;
-            let mut min_colors = [0, 0, 0];
-            for set in sets {
-                let set: Vec<&str> = set.split(',').collect();
-                let colors = count_set(&set);
-                if !((colors[0] <= max_colors[0]) && (colors[1] <= max_colors[1]) && (colors[2] <= max_colors[2])) {
-                    possible = false;
-                }
-                if colors[0] > min_colors[0] { min_colors[0] = colors[0]; }
-                if colors[1] > min_colors[1] { min_colors[1] = colors[1]; }
-                if colors[2] > min_colors[2] { min_colors[2] = colors[2]; }
+        for set in line[1].split(';').collect::<Vec<&str>>() {
+            for pair in set.split(',').collect::<Vec<&str>>() {
+                let pair = pair.split(' ').collect::<Vec<&str>>();
+                let num = pair[1].parse::<usize>().unwrap();
+                match pair[2] {
+                    "red" => {
+                        if min_colors[0] < num { min_colors[0] = num; }
+                        if num > max_colors[0] { possible = false; }
+                    },
+                    "green" => {
+                        if min_colors[1] < num { min_colors[1] = num; }
+                        if num > max_colors[1] { possible = false; }
+                    },
+                    "blue" => {
+                        if min_colors[2] < num { min_colors[2] = num; }
+                        if num > max_colors[2] { possible = false; }
+                    },
+                    _ => panic!("Unreachable"),
+                };
             }
-
-            if possible { acc1 += id; }
-            acc2 += min_colors[0] * min_colors[1] * min_colors[2]
-
         }
+        if possible { acc1 += id; }
+        acc2 += min_colors[0] * min_colors[1] * min_colors[2];
     }
 
     println!("Day 2 part 1: {}", acc1);
     println!("Day 2 part 2: {}", acc2);
-}
-
-fn count_set(set: &Vec<&str>) -> [usize; 3] {
-    let re = Regex::new(r"(\d+) (\w+)").unwrap();
-    let mut colors = [0, 0, 0];
-
-    for pair in set {
-        if let Some(captures) = re.captures(pair) {
-            let num = captures.get(1).map_or("", |m| m.as_str()).parse::<usize>().unwrap();
-            match captures.get(2).map_or("", |m| m.as_str()) {
-                "red" => colors[0] += num,
-                "green" => colors[1] += num,
-                "blue" => colors[2] += num,
-                _ => panic!()
-            };
-        }
-    }
-
-    colors
 }

@@ -5,12 +5,12 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[profile.release]
+debug = true
+
 [dependencies]
-regex = "1.10.2"
-ansi_term = "0.12.1"
-reqwest = { version = "0.11.23", featues = ["blocking"] }
-tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
-select = "0.6.0"
-clap = { version =  "4.4.12", features = ["derive"] }
-tera = "1.19.1"
-ureq = "2.9.1"
+regex = "1.10.2" # Regex
+#ansi_term = "0.12.1" # For color printing
+clap = { version =  "4.4.12", features = ["derive"] } # Command Line Argument Parsing
+tera = "1.19.1" # Temlate stuff
+ureq = "2.9.1" # Web stuff
