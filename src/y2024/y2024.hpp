@@ -1,0 +1,35 @@
+#pragma once
+
+#include <iostream>
+
+void day1();
+void day2();
+void day3();
+void day4();
+void day5();
+void day6();
+
+void y2024(int day) {
+    switch (day) {
+        case 1:
+            day1();
+            break;
+        case 2:
+            day2();
+            break;
+        case 3:
+            day3();
+            break;
+        case 4:
+            day4();
+            break;
+        case 5:
+            day5();
+            break;
+        case 6:
+            day6();
+            break;
+        default:
+            std::cout << "Unsupported day: " << day << std::endl;
+    }
+}
