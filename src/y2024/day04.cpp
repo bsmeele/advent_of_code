@@ -3,7 +3,6 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#include <windows.h>
 
 void day4() {
     std::ifstream input("input/y2024/day04/input.txt");

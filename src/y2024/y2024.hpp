@@ -8,6 +8,8 @@ void day3();
 void day4();
 void day5();
 void day6();
+void day7();
+void day8();
 
 void y2024(int day) {
     switch (day) {
@@ -28,6 +30,12 @@ void y2024(int day) {
             break;
         case 6:
             day6();
+            break;
+        case 7:
+            day7();
+            break;
+        case 8:
+            day8();
             break;
         default:
             std::cout << "Unsupported day: " << day << std::endl;
