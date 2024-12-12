@@ -19,6 +19,7 @@ g++ -std=c++17 %SRC_DIR%\main.cpp ^
 %SRC_DIR%\y2024\day09.cpp ^
 %SRC_DIR%\y2024\day10.cpp ^
 %SRC_DIR%\y2024\day11.cpp ^
+%SRC_DIR%\y2024\day12.cpp ^
 -o %OUTPUT%
 
 REM Check for success
