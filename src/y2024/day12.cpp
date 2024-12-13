@@ -6,6 +6,8 @@
 #include <array>
 #include <unordered_set>
 
+// Alternative solution: count corners
+
 struct ArrayHash {
     std::size_t operator()(const std::array<int, 2>& arr) const {
         // Combine the two integers into a single hash value
