@@ -4,14 +4,15 @@
 #include <sstream>
 #include <regex>
 #include <vector>
+#include <cstdint>
 
-bool check_calibration(unsigned long target, unsigned long current, std::vector<unsigned long> rest, bool part2) {
+bool check_calibration(uint64_t target, uint64_t current, std::vector<uint64_t> rest, bool part2) {
     if (rest.size() == 0) {
         if (target == current) { return true; }
         else { return false; }
     }
 
-    int num = rest[0];
+    uint64_t num = rest[0];
     rest.erase(rest.begin());
     if (check_calibration(target, current + num, rest, part2)) { return true; }
     if (check_calibration(target, current * num, rest, part2)) { return true; };
@@ -21,22 +22,26 @@ bool check_calibration(unsigned long target, unsigned long current, std::vector<
 
         std::string concatenated = str1 + str2;
 
-        unsigned long concatenatedNumber = std::stoul(concatenated);
+        uint64_t concatenatedNumber = std::stoull(concatenated);
 
         if (check_calibration(target, concatenatedNumber, rest, part2)) { return true; };
     }
     return false;
 }
 
-void day7() {
-    std::ifstream input("input/y2024/day07/input.txt");
+void day7(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day07/test.txt"; }
+    else { filepath = "input/y2024/day07/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;
     }
 
-    unsigned long part1 = 0;
-    unsigned long part2 = 0;
+    uint64_t part1 = 0;
+    uint64_t part2 = 0;
 
     std::regex pattern(R"((\d+):\s(\d+(\s+\d+)*)?)");
     std::smatch matches;
@@ -44,9 +49,9 @@ void day7() {
     std::string line;
     while (std::getline(input, line)) {
         if (std::regex_match(line, matches, pattern)) {
-            unsigned long target = std::stoul(matches[1]);
+            uint64_t target = std::stoull(matches[1]);
 
-            std::vector<unsigned long> operands;
+            std::vector<uint64_t> operands;
 
             std::string rest_of_string = matches[2];
             std::regex number_pattern(R"(\d+)");
@@ -56,10 +61,10 @@ void day7() {
 
             // Extract all numbers into the vector
             for (auto it = numbers_begin; it != numbers_end; ++it) {
-                operands.push_back(std::stoul(it->str()));
+                operands.push_back(std::stoull(it->str()));
             }
 
-            unsigned long current = operands[0];
+            uint64_t current = operands[0];
             operands.erase(operands.begin());
 
             if (check_calibration(target, current, operands, false)) { part1 += target; }

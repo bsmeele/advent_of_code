@@ -4,8 +4,12 @@
 #include <sstream>
 #include <regex>
 
-void day3() {
-    std::ifstream input("input/y2024/day03/input.txt");
+void day3(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day03/test.txt"; }
+    else { filepath = "input/y2024/day03/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

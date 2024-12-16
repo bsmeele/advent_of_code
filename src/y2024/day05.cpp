@@ -6,8 +6,12 @@
 #include <algorithm>
 #include <utility>
 
-void day5() {
-    std::ifstream input("input/y2024/day05/input.txt");
+void day5(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day05/test.txt"; }
+    else { filepath = "input/y2024/day05/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

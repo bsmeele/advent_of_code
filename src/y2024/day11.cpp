@@ -54,8 +54,12 @@ unsigned long long blink(unsigned long long stone, unsigned int depth, std::unor
     }
 }
 
-void day11() {
-    std::ifstream input("input/y2024/day11/input.txt");
+void day11(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day11/test.txt"; }
+    else { filepath = "input/y2024/day11/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

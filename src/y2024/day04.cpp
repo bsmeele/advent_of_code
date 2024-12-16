@@ -4,8 +4,12 @@
 #include <sstream>
 #include <vector>
 
-void day4() {
-    std::ifstream input("input/y2024/day04/input.txt");
+void day4(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day04/test.txt"; }
+    else { filepath = "input/y2024/day04/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

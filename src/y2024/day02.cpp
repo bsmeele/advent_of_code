@@ -28,8 +28,12 @@ bool check_report(std::vector<int> report) {
     return true;
 }
 
-void day2() {
-    std::ifstream input("input/y2024/day02/input.txt");
+void day2(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day02/test.txt"; }
+    else { filepath = "input/y2024/day02/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

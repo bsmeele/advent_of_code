@@ -6,8 +6,12 @@
 #include <array>
 #include <unordered_set>
 
-void day10() {
-    std::ifstream input("input/y2024/day10/input.txt");
+void day10(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day10/test.txt"; }
+    else { filepath = "input/y2024/day10/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

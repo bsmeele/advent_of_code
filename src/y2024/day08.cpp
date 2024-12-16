@@ -18,8 +18,12 @@ void print_map(std::unordered_map<char, std::vector<std::pair<int, int>>> antenn
     }
 }
 
-void day8() {
-    std::ifstream input("input/y2024/day08/input.txt");
+void day8(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day08/test.txt"; }
+    else { filepath = "input/y2024/day08/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

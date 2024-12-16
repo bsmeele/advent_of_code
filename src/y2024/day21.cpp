@@ -4,10 +4,10 @@
 #include <sstream>
 #include <cstdint>
 
-void day_(bool test) {
+void day21(bool test) {
     std::string filepath;
-    if (test) { filepath = "input/y2024/day_/test.txt"; }
-    else { filepath = "input/y2024/day_/input.txt"; }
+    if (test) { filepath = "input/y2024/day21/test.txt"; }
+    else { filepath = "input/y2024/day21/input.txt"; }
 
     std::ifstream input(filepath);
     if (!input) {
@@ -19,4 +19,5 @@ void day_(bool test) {
     while (std::getline(input, line)) {
         std::cout << line << std::endl;
     }
+    std::cout << "Year 2024 day 21 not implemented yet" << std::endl;
 }

@@ -43,8 +43,12 @@ int count_sides(std::unordered_set<std::array<int, 2>, ArrayHash> dir) {
     return sides;
 }
 
-void day12() {
-    std::ifstream input("input/y2024/day12/input.txt");
+void day12(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day12/test.txt"; }
+    else { filepath = "input/y2024/day12/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;

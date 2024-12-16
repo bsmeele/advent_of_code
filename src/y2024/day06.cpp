@@ -60,8 +60,12 @@ std::pair<std::unordered_set<int>, bool> play_map(std::unordered_set<int> map, s
     }
 }
 
-void day6() {
-    std::ifstream input("input/y2024/day06/input.txt");
+void day6(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day06/test.txt"; }
+    else { filepath = "input/y2024/day06/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;
@@ -130,14 +134,11 @@ void day6() {
                 map.insert(x + y*map_size.first);
                 std::pair<std::unordered_set<int>, bool> res = play_map(map, map_size, guard, orientation);
                 if (res.second) {
-                    // print_map(map, res.first, map_size, guard, orientation);
                     part2 += 1;
                 }
                 map.erase(x + y*map_size.first);
             }
         }
-
-        if (y%10 == 0) { std::cout << "Completed row " << y << std::endl; }
     }
     std::cout << "Year 2024 day 6 part 2: " << part2 << std::endl;
 }

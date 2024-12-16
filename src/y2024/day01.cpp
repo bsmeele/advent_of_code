@@ -5,8 +5,12 @@
 #include <vector>
 #include <algorithm>
 
-void day1() {
-    std::ifstream input("input/y2024/day01/input");
+void day1(bool test) {
+    std::string filepath;
+    if (test) { filepath = "input/y2024/day01/test.txt"; }
+    else { filepath = "input/y2024/day01/input.txt"; }
+
+    std::ifstream input(filepath);
     if (!input) {
         std::cerr << "Failed to open input file" << std::endl;
         return;
