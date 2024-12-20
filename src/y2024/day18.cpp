@@ -8,6 +8,11 @@
 #include <utility>
 #include <unordered_set>
 
+// Alternative solution:
+//   A path is no longer possible when there is a continuous wall (diagonals allowed) from one side of the map to the other
+//   And/or work backwards by removing obstacles one by one
+//   And/or use binary search
+
 struct PairHash {
     template <typename T1, typename T2>
     std::size_t operator()(const std::pair<T1, T2>& p) const {

@@ -7,6 +7,9 @@
 #include <unordered_map>
 #include <regex>
 
+// Alternate solution:
+//   Regex lol
+
 uint64_t make_design(std::string design, std::vector<std::string> towels, std::unordered_map<std::string, uint64_t> &cache) {
     if (design.length() == 0) { return 1; }
 

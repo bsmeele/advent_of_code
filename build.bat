@@ -7,7 +7,7 @@ set OUTPUT=aoc.exe
 
 REM Compile command
 echo Compiling...
-g++ -std=c++17 %SRC_DIR%\main.cpp ^
+g++ -std=c++17 -g %SRC_DIR%\main.cpp ^
 %SRC_DIR%\y2024\day01.cpp ^
 %SRC_DIR%\y2024\day02.cpp ^
 %SRC_DIR%\y2024\day03.cpp ^
