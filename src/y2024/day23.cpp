@@ -10,7 +10,7 @@
 
 // Part 1 and 2 could probably be combined
 // Both parts doe a bunch of extra work
-// Apperantly this is a np-complete problem, but I dont'know the solution so I just check every permutation
+// Apperantly this is a np-complete problem (maximum clique problem?), but I dont'know the solution so I just check every permutation
 
 void day23(bool test) {
     std::string filepath;
@@ -60,8 +60,10 @@ void day23(bool test) {
 
     std::cout << "Year 2024 day 23 part 1: " << part1 << std::endl;
 
+    // Similar to part1, this is order dependent so does a bunch of unnecessary work
     std::unordered_set<std::string> biggest_lan;
     for (auto [c1, v1] : graph) {
+        if (v1.size()+1 < biggest_lan.size()) { continue; }
         for (std::string c2 : v1) {
             std::unordered_set<std::string> lan = {c2};
             for (std::string c3 : v1) {
@@ -83,7 +85,6 @@ void day23(bool test) {
         }
     }
 
-    // Similar to part1, this is order dependent so does a bunch of unnecessary work
     std::vector<std::string> sorted_lan(biggest_lan.begin(), biggest_lan.end());
     std::sort(sorted_lan.begin(), sorted_lan.end());
     std::cout << "Year 2024 day 23 part 2: ";
