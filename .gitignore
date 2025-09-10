@@ -1,1 +1,10 @@
-/target
+.vscode/
+app/
+build/
+.gradle/
+target/
+
+input/
+*.txt
+
+.exe
