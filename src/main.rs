@@ -1,4 +1,3 @@
-mod y2015;
 mod y2022;
 mod y2023;
 mod web_stuff;
@@ -29,7 +28,6 @@ fn main() {
     match args.year {
         2023 => y2023::y2023(args.day),
         2022 => y2022::y2022(args.day),
-        2015 => y2015::y2015(args.day, args.test),
         year => {
              if let Ok(metadata) = fs::metadata(format!("src/y{}", year)) {
                  if metadata.is_dir() {
