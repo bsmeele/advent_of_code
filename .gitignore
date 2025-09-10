@@ -1,4 +1,9 @@
 .vscode/
-eigen/
+app/
+build/
+.gradle/
+
+input/
+*.txt
 
 .exe
