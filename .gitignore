@@ -1,0 +1,9 @@
+.vscode/
+app/
+build/
+.gradle/
+
+input/
+*.txt
+
+.exe
