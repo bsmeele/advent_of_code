@@ -1,4 +1,0 @@
-﻿# Advent of Code
-- Rust: see \rust\ branch
-- C++: see \cpp\ branch
-
