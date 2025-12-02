@@ -21,7 +21,7 @@ void y2025_day1(int test) {
 
   char dir;
   int turn;
-  while (fscanf(ifp, "%c%d\n", &dir, &turn) != EOF) {
+  while (fscanf(ifp, "%c%d\n", &dir, &turn) == 2) {
     if (dir == 'L') {
       if (turn >= cur) {
         if (cur == 0) {
