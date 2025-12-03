@@ -14,7 +14,7 @@ void y2025(int day, int test) {
     y2025_day2(test);
     break;
   case 3:
-    // y2025_day3(test);
+    y2025_day3(test);
     break;
   case 4:
     // y2025_day4(test);
