@@ -87,17 +87,30 @@ void y2025_day4(int test) {
     char* row = malloc((strlen(line) + 1) * sizeof(char));
     if (row == NULL) {
       printf("Could not allocate memory\n");
+
+      for (size_t i = 0; i < num_rows; i++) {
+        free(map[i]);
+      }
+      free(map);
       return;
     }
     strcpy(row, line);
-    num_rows += 1;
 
-    map = realloc(map, num_rows * sizeof(char*));
-    if (map == NULL) {
+    char** tmp = realloc(map, (num_rows+1) * sizeof(char*));
+    if (tmp == NULL) {
       printf("Could not alocate memory\n");
+
+      free(row);
+      for (size_t i = 0; i < num_rows; i++) {
+        free(map[i]);
+      }
+      free(map);
       return;
     }
-    map[num_rows-1] = row;
+    map = tmp;
+
+    map[num_rows] = row;
+    num_rows += 1;
   }
 
   int part1 = remove_rolls(map, num_rows);
@@ -110,4 +123,9 @@ void y2025_day4(int test) {
 
   printf("Year 2025 day 4 part 1: %d\n", part1);
   printf("Year 2025 day 4 part 2: %d\n", part2);
+
+  for (size_t i = 0; i < num_rows; i++) {
+    free(map[i]);
+  }
+  free(map);
 }
