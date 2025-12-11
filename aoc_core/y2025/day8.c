@@ -1,76 +1,11 @@
 #include "y2025.h"
 
+#include "utils/vector/vec_u64.h"
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-
-struct Vec {
-  uint64_t* mem;
-  size_t size;
-  size_t capacity;
-};
-
-struct Vec vec_new() {
-  struct Vec vec;
-  vec.size = 0;
-  vec.capacity = 8;
-  vec.mem = malloc(vec.capacity * sizeof(uint64_t));
-  return vec;
-}
-
-struct Vec vec_new_with_capacity(size_t capacity) {
-  struct Vec vec;
-  vec.size = 0;
-  vec.capacity = capacity;
-  vec.mem = malloc(vec.capacity * sizeof(uint64_t));
-  if (vec.mem == NULL) {
-    printf("Couldn't allocate memory for vec\n");
-  }
-  return vec;
-}
-
-void vec_push(struct Vec* vec, uint64_t data) {
-  if (vec->size == vec->capacity) {
-    vec->capacity *= 2;
-    uint64_t* tmp = realloc(vec->mem, vec->capacity * sizeof(uint64_t));
-    if (tmp == NULL) {
-      printf("Couln't realloc vec\n");
-      return;
-    }
-    vec->mem = tmp;
-  }
-
-  vec->mem[vec->size] = data;
-  vec->size += 1;
-}
-
-uint64_t vec_pop(struct Vec* vec) {
-  if (vec->size == 0) {
-    printf("Can not pop from empty vec\n");
-    return 0;
-  }
-
-  vec->size -= 1;
-  return vec->mem[vec->size];
-}
-
-uint64_t vec_peak(struct Vec* vec, size_t idx) {
-  if (idx >= vec->size) {
-    printf("Index out of bounds\n");
-    return 0;
-  }
-
-  return vec->mem[idx];
-}
-
-void vec_clear(struct Vec* vec) {
-  vec->size = 0;
-}
-
-void vec_free(struct Vec* vec) {
-  free(vec->mem);
-}
 
 void y2025_day8(int test) {
   uint64_t cables;

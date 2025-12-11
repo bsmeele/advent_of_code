@@ -172,8 +172,8 @@ void y2025_day9(int test) {
     }
   }
 
-  printf("Year 2025 day 8 part 1: %ld\n", part1);
-  printf("Year 2025 day 8 part 2: %ld\n", part2);
+  printf("Year 2025 day 9 part 1: %ld\n", part1);
+  printf("Year 2025 day 9 part 2: %ld\n", part2);
 
 cleanup:
   for (size_t r = 0; r < num_tiles; r++) {
